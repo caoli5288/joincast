@@ -1,0 +1,8 @@
+name: Joincast
+main: com.mengcraft.joincast.Main
+version: ${project.version}
+
+commands:
+  joincast:
+    description: None.
+    permission: joincast.use
