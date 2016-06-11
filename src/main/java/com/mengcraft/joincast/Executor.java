@@ -45,7 +45,7 @@ public class Executor implements Listener {
     private void fetch(Player p) {
         main.execute(() -> {
             Joincast def = main.getDatabase().find(Joincast.class, p.getUniqueId());
-            if (def != null && def.getMessage() != null) {
+            if (def != null && def.getMessage() != null && p.hasPermission(def.getMessage().getPermission())) {
                 main.broadcast(p, def.getMessage().getMessage());
             }
         });

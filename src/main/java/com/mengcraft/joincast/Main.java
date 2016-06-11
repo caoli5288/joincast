@@ -1,6 +1,7 @@
 package com.mengcraft.joincast;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONValue;
 
@@ -27,4 +28,5 @@ public class Main extends JavaPlugin {
             getServer().broadcastMessage(String.format(s, name));
         }
     }
+
 }
