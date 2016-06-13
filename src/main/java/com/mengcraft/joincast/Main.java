@@ -1,8 +1,12 @@
 package com.mengcraft.joincast;
 
+import com.mengcraft.joincast.listener.ClickListener;
+import com.mengcraft.joincast.listener.JoinListener;
+import com.mengcraft.joincast.listener.PermissionFetchedListener;
 import com.mengcraft.simpleorm.DatabaseException;
 import com.mengcraft.simpleorm.EbeanHandler;
 import com.mengcraft.simpleorm.EbeanManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,23 +36,36 @@ public class Main extends JavaPlugin {
         db.reflect();
         db.install();
 
-        List<JoincastMessage> messageList = db
-                .find(JoincastMessage.class)
+        Plugin permission = getServer().getPluginManager().getPlugin("Permission");
+        if (permission == null) {
+            getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+            getLogger().warning("Plugin Permission not found");
+            getLogger().warning("Build-in shop disabled");
+        } else {
+            if (getConfig().getBoolean("shop")) {
+                Plugin point = getServer().getPluginManager().getPlugin("PlayerPoints");
+                if (point == null) {
+                    getLogger().warning("Plugin PlayerPoints not found");
+                    getLogger().warning("Build-in shop disabled");
+                } else {
+                    shop = ShopSupport.newInstance();
+                }
+            }
+            getServer().getPluginManager().registerEvents(new PermissionFetchedListener(this), this);
+        }
+
+        List<JoincastMessage> messageList = db.find(JoincastMessage.class)
                 .orderBy("slot desc")
                 .findList();
 
-        if (getConfig().getBoolean("shop")) {
-            Plugin permission = getServer().getPluginManager().getPlugin("Permission");
-            Plugin point = getServer().getPluginManager().getPlugin("PlayerPoints");
-            if (permission != null && point != null) {
-                shop = ShopSupport.newInstance();
-            } else {
-                throw new NullPointerException("Build-in shop depend with Permission and PlayerPoints");
-            }
-        }
-
-        getServer().getPluginManager().registerEvents(new Executor(this, messageList), this);
+        getServer().getPluginManager().registerEvents(new ClickListener(this, messageList), this);
         getCommand("joincast").setExecutor(new Commander(this, messageList));
+
+        String[] ad = {
+                ChatColor.GREEN + "梦梦家高性能服务器出租店",
+                ChatColor.GREEN + "shop105595113.taobao.com"
+        };
+        getServer().getConsoleSender().sendMessage(ad);
     }
 
     public void broadcast(Player p, String message) {

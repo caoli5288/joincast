@@ -8,7 +8,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
 
 import java.util.List;
 
