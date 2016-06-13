@@ -12,11 +12,17 @@ public class JoincastMessage {
     @Id
     private int id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     private String message;
 
     @Column(nullable = false)
     private String permission;
+
+    @Column(nullable = false)
+    private int price;
+
+    @Column(nullable = false)
+    private int slot;
 
     public int getId() {
         return id;
@@ -40,5 +46,21 @@ public class JoincastMessage {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getSlot() {
+        return slot;
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
     }
 }

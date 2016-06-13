@@ -6,3 +6,6 @@ commands:
   joincast:
     description: None.
     permission: joincast.use
+
+depend: [SimpleORM]
+softdepend: [Permission, PlayerPoints]
