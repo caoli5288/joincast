@@ -1,6 +1,6 @@
 package com.mengcraft.joincast;
 
-import com.mengcraft.joincast.listener.ClickListener;
+import com.mengcraft.joincast.listener.ShopListener;
 import com.mengcraft.joincast.listener.JoinListener;
 import com.mengcraft.joincast.listener.PermissionFetchedListener;
 import com.mengcraft.simpleorm.DatabaseException;
@@ -37,14 +37,14 @@ public class Main extends JavaPlugin {
         db.install();
 
         Plugin permission = getServer().getPluginManager().getPlugin("Permission");
-        if (permission == null) {
+        if (nil(permission)) {
             getServer().getPluginManager().registerEvents(new JoinListener(this), this);
             getLogger().warning("Plugin Permission not found");
             getLogger().warning("Build-in shop disabled");
         } else {
             if (getConfig().getBoolean("shop")) {
                 Plugin point = getServer().getPluginManager().getPlugin("PlayerPoints");
-                if (point == null) {
+                if (nil(point)) {
                     getLogger().warning("Plugin PlayerPoints not found");
                     getLogger().warning("Build-in shop disabled");
                 } else {
@@ -58,7 +58,7 @@ public class Main extends JavaPlugin {
                 .orderBy("slot desc")
                 .findList();
 
-        getServer().getPluginManager().registerEvents(new ClickListener(this, messageList), this);
+        getServer().getPluginManager().registerEvents(new ShopListener(this, messageList), this);
         getCommand("joincast").setExecutor(new Commander(this, messageList));
 
         String[] ad = {
@@ -76,12 +76,16 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public void execute(Runnable j) {
+    public void exec(Runnable j) {
         getServer().getScheduler().runTaskAsynchronously(this, j);
     }
 
-    public void execute(Runnable j, int delay) {
+    public void exec(int delay, Runnable j) {
         getServer().getScheduler().runTaskLaterAsynchronously(this, j, delay);
+    }
+
+    public static boolean nil(Object any) {
+        return any == null;
     }
 
     public void process(Runnable j) {

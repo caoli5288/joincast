@@ -15,16 +15,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
+import static com.mengcraft.joincast.Main.nil;
+
 /**
  * Created on 16-6-10.
  */
-public class ClickListener implements Listener {
+public class ShopListener implements Listener {
 
     private final List<JoincastMessage> messageList;
     private final int messageListSize;
     private final Main main;
 
-    public ClickListener(Main main, List<JoincastMessage> messageList) {
+    public ShopListener(Main main, List<JoincastMessage> messageList) {
         this.main = main;
         this.messageList = messageList;
         messageListSize = messageList.size();
@@ -38,7 +40,7 @@ public class ClickListener implements Listener {
                 JoincastMessage message = messageList.get(slot);
                 if (event.getWhoClicked().hasPermission(message.getPermission())) {
                     process(event.getWhoClicked(), message);
-                } else if (main.getShop() != null && event.getClick() == ClickType.SHIFT_LEFT && message.getPrice() > 0) {
+                } else if (!nil(main.getShop()) && event.getClick() == ClickType.SHIFT_LEFT && message.getPrice() > 0) {
                     processBuy(event.getWhoClicked(), message);
                 }
             }
@@ -48,7 +50,7 @@ public class ClickListener implements Listener {
 
     private void processBuy(HumanEntity human, JoincastMessage message) {
         Player p = (Player) human;
-        main.execute(() -> {
+        main.exec(() -> {
             ShopMXBean shop = main.getShop();
             if (shop.removePoint(p, message.getPrice())) {
                 shop.addPermission(p, message.getPermission());
@@ -64,10 +66,10 @@ public class ClickListener implements Listener {
     }
 
     private void process(HumanEntity p, JoincastMessage message) {
-        main.execute(() -> {
+        main.exec(() -> {
             Joincast fetched = main.getDatabase().find(Joincast.class, p.getUniqueId());
             Joincast def;
-            if (fetched == null) {
+            if (nil(fetched)) {
                 def = new Joincast();
                 def.setId(p.getUniqueId());
                 def.setName(p.getName());

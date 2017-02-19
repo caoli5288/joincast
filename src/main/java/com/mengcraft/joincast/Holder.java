@@ -11,6 +11,8 @@ import org.json.simple.JSONValue;
 
 import java.util.List;
 
+import static com.mengcraft.joincast.Main.nil;
+
 /**
  * Created on 16-6-11.
  */
@@ -33,7 +35,7 @@ public class Holder implements InventoryHolder {
             ItemMeta meta = item.getItemMeta();
 
             List<String> lore = (List<String>) JSONValue.parse(message.getMessage());
-            if (lore == null) {
+            if (nil(lore)) {
                 throw new NullPointerException(message.getMessage());
             }
 

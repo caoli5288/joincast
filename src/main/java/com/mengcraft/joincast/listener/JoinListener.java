@@ -45,11 +45,11 @@ public class JoinListener implements Listener {
     }
 
     private void fetch(Player p) {
-        main.execute(() -> {
+        main.exec(1, () -> {
             Joincast def = main.getDatabase().find(Joincast.class, p.getUniqueId());
             if (def != null && def.getMessage() != null && p.hasPermission(def.getMessage().getPermission())) {
                 main.broadcast(p, def.getMessage().getMessage());
             }
-        }, 1);
+        });
     }
 }

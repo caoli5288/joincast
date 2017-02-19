@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+import static com.mengcraft.joincast.Main.nil;
+
 /**
  * Created on 16-6-12.
  */
@@ -21,7 +23,7 @@ public class Commander implements CommandExecutor {
     }
 
     private void openChest(Player p) {
-        p.openInventory(Holder.of(p, messageList, main.getShop() != null).getInventory());
+        p.openInventory(Holder.of(p, messageList, !nil(main.getShop())).getInventory());
     }
 
     @Override
